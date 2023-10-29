@@ -1,5 +1,6 @@
 import pygame
 import sys
+import os
 from Hero import Hero
 
 def start_game():
@@ -9,7 +10,6 @@ def start_game():
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode((w,h))
     pygame.display.set_caption('Game')
-    bg = (255,255,255)
 
     left_wall = pygame.Rect(0, 0, 10, h)
     right_wall = pygame.Rect(w - 10, 0, 10, h)
@@ -22,7 +22,7 @@ def start_game():
             if event.type == pygame.QUIT:
                 sys.exit()
 
-        screen.fill(bg)
+        screen.blit(pygame.image.load(os.path.join('img/back.jpeg')), (-100, 100))
         pygame.draw.rect(screen, (0, 0, 0), left_wall)
         pygame.draw.rect(screen, (0, 0, 0), right_wall)
         hero.output_hero()
