@@ -3,22 +3,16 @@ import sys
 from Hero import Hero
 
 def start_game():
-    W = 600  # ширина экрана
-    H = 900
     pygame.init()
-    sc = pygame.display.set_mode((W, H))
+    w = 600
+    h = 750
     clock = pygame.time.Clock()
-    screen = pygame.display.set_mode((W,H))
+    screen = pygame.display.set_mode((w,h))
     pygame.display.set_caption('Game')
     bg = (255,255,255)
-    BLUE = (0, 70, 225)
 
-    x = W // 2
-    y = H // 2
-    STOP = "stop"
-    motion = STOP
-    RIGHT = "to the right"
-    LEFT = "to the left"
+    left_wall = pygame.Rect(0, 0, 10, h)
+    right_wall = pygame.Rect(w - 10, 0, 10, h)
 
     hero = Hero(screen)
 
@@ -27,19 +21,24 @@ def start_game():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    hero.rect.centerx += -10
-                elif event.key == pygame.K_RIGHT:
-                    hero.rect.centerx += 10
-            elif event.type == pygame.KEYUP:
-                if event.key in [pygame.K_LEFT,
-                         pygame.K_RIGHT]:
-                    motion = STOP
-        pygame.display.flip()
+
         screen.fill(bg)
+        pygame.draw.rect(screen, (0, 0, 0), left_wall)
+        pygame.draw.rect(screen, (0, 0, 0), right_wall)
         hero.output_hero()
         pygame.display.update()
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_a]:
+            hero.rect.centerx -= 5
+        elif keys[pygame.K_d]:
+            hero.rect.centerx += 5
+        
+        if hero.rect.centerx < left_wall.right:
+            hero.rect.centerx = left_wall.right
+        elif hero.rect.centerx > right_wall.left:
+            hero.rect.centerx = right_wall.left
+
         clock.tick(60)
 
 start_game()
